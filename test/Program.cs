@@ -36,14 +36,10 @@ namespace PasswordCracker
         Console.WriteLine("Выполняется подбор пароля...");
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        if (countStream == 1)
-        {
-          RunSingleThreaded(targetHashes[selection - 1]);
-        }
-        else
-        {
-          RunMultiThreaded(targetHashes[selection - 1], countStream);
-        }
+       
+        
+        RunMultiThreaded(targetHashes[selection - 1], countStream);
+        
         stopwatch.Stop();
         Console.WriteLine($"Подбор завершен. Затраченное время: {stopwatch.Elapsed}");
         Console.WriteLine("Введите ENTER, чтобы продожить");
@@ -55,41 +51,7 @@ namespace PasswordCracker
 
 
 
-      static void RunSingleThreaded(string targetHashes)
-      {
-        char[] chars = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
-
-        foreach (char c1 in chars)
-        {
-          foreach (char c2 in chars)
-          {
-            foreach (char c3 in chars)
-            {
-              foreach (char c4 in chars)
-              {
-                foreach (char c5 in chars)
-                {
-                  if (foundFlag!=true)
-                  {
-                    string password = new string(new[] { c1, c2, c3, c4, c5 });
-                    string hash = GetSHA256Hash(password);
-                    if (targetHashes.Contains(hash))
-                    {
-                      Console.WriteLine($"Найден пароль: {password}, соответствующий хэшу : {hash}");
-                      foundFlag = true;
-                      break;
-                    }
-                  }
-                  else
-                  {
-                    return;
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      
 
       static void RunMultiThreaded(string targetHashes, int numThreads)
       {
@@ -141,6 +103,7 @@ namespace PasswordCracker
               }
             }
           }));
+
         }
 
         // Ожидаем завершения всех задач
